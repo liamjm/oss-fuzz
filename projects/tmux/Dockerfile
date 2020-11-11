@@ -1,4 +1,4 @@
-# Copyright 2020 Google Inc.
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +13,12 @@
 # limitations under the License.
 #
 ################################################################################
-FROM gcr.io/oss-fuzz-base/base-builder
-RUN apt-get update && apt-get install -y make cmake flex bison
-RUN git clone https://github.com/fluent/fluent-bit/
 
-WORKDIR $SRC
+FROM gcr.io/oss-fuzz-base/base-builder
+RUN apt-get update && apt-get install -y autoconf automake bison pkg-config \
+    libevent-dev ncurses-dev
+
+RUN git clone --depth 1 https://github.com/tmux/tmux.git
+RUN git clone --depth 1 https://github.com/snizovtsev/tmux-fuzzing-corpus.git
+WORKDIR tmux
 COPY build.sh $SRC/
