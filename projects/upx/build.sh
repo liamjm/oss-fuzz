@@ -16,25 +16,17 @@
 ################################################################################
 
 # build project
-# e.g.
-# ./autogen.sh
-# ./configure
-# make -j$(nproc) all
-#
-gcc -v
-gcc --version
-gcc -V
 
-cd /tmp/ucl-1.03
-./configure  CC="gcc -std=gnu90" #|| cat ./config.log
+cd $SRC/ucl-1.03
+./configure
 make all
-export UPX_UCLDIR=/tmp/ucl-1.03 
+export UPX_UCLDIR=$SRC/ucl-1.03
 
 cd $SRC/upx
 make all
 
 # build fuzzers
-# e.g.
-# $CXX $CXXFLAGS -std=c++11 -Iinclude \
-#     /path/to/name_of_fuzzer.cc -o $OUT/name_of_fuzzer \
-#     $LIB_FUZZING_ENGINE /path/to/library.a
+./fuzz/build.sh
+
+# Ensure fuzzer is present
+file ./fuzz/unpacker_fuzzer

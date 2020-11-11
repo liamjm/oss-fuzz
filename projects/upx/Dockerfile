@@ -15,12 +15,16 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN apt-get update && apt-get install -y make autoconf automake libtool wget zlib1g zlib1g-dev libc6-dev build-essential gcc clang
-RUN git clone --depth 1  https://github.com/upx/upx upx 
-WORKDIR upx
-RUN git submodule update --init --recursive
-WORKDIR /tmp/
+RUN apt-get update && apt-get install -y make autoconf automake libtool wget zlib1g-dev
+
 RUN wget http://www.oberhumer.com/opensource/ucl/download/ucl-1.03.tar.gz
-RUN tar -zxf ucl-1.03.tar.gz 
+RUN tar -zxf ucl-1.03.tar.gz
+RUN rm ucl-1.03.tar.gz
+
+# TODO(liamjm): migrate to main repo devel branch ( https://github.com/upx/upx)
+RUN git clone --depth 1 --branch docker https://github.com/liamjm/upx upx
+WORKDIR upx
+RUN git submodule update --init --recursive --remote
 
 COPY build.sh $SRC/
+
